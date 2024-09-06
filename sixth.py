@@ -20,7 +20,19 @@ title_label=Label(text='''Tk/Tcl has long been an integral part of Python.\n It 
 
 The tkinter package is a thin object-oriented layer on top of Tcl/Tk.\n To use tkinter, you don’t need to write Tcl code, but you will need to consult the Tk documentation, and occasionally the Tcl documentation.\n tkinter is a set of wrappers that implement the Tk widgets as Python classes.''', bg="red", fg="white", padx=20, pady=20, font="comicsansms 13 bold", borderwidth=5, relief="solid",highlightthickness=2, highlightbackground="black")
 
-title_label.pack()
+
+# ************Important Pack options*************
+
+# anchor=nw(north-west),se,sw,ne
+# side= top,bottom, left, right(by def: top)
+# fill
+# padx
+# pady
+
+
+# title_label.pack(anchor="ne")
+# title_label.pack(side="bottom", anchor="se",fill=X)
+title_label.pack(side="left", anchor="se",fill=Y,padx=20,pady=25)
 
 
 
