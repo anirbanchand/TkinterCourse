@@ -1,0 +1,6 @@
+The student's name is Anirban
+The student's age is 21
+The dance form is pop
+The student's name is Chand
+The student's age is 31
+The dance form is pop
