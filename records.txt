@@ -1,0 +1,2 @@
+('Anirban', '785642', 'Male', 'NA', 'upi', 1)
+('Chand', '9434864879', 'Female', 'YES', 'Cash', 0)
