@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import sqlite3
 
 root = Tk()
 root.geometry("500x500")
@@ -21,7 +22,7 @@ var_c3 = IntVar()
 radio_var = StringVar()
 
 # Function to display entered information
-def printentry():
+def database():
     first = fn.get()
     last = ln.get()
     date = dob_var.get()
@@ -38,16 +39,55 @@ def printentry():
 
     gender = radio_var.get()
 
-    # Displaying entered values
-    print(f"First Name: {first}")
-    print(f"Last Name: {last}")
-    print(f"Date of Birth: {date}")
-    print(f"Country: {country}")
-    print(f"Programming Languages: {', '.join(programming_languages)}")
-    print(f"Gender: {gender}")
+    try:
+        # Establish connection to the SQLite database
+        conn = sqlite3.connect('form.db')
 
-    # Message box to confirm registration
-    messagebox.showinfo("Registration Form", "Registration Successful!")
+        # Creating a table if it doesn't exist
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS STUDENT(
+                    Fname TEXT, 
+                    Lname TEXT, 
+                    DOB DATE, 
+                    Country TEXT, 
+                    Programming TEXT, 
+                    Gender TEXT
+                )
+            ''')
+
+            # Inserting the values from the form into the STUDENT table
+            cursor.execute('''
+                INSERT INTO STUDENT (Fname, Lname, DOB, Country, Programming, Gender) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (first, last, date, country, ','.join(programming_languages), gender))
+
+            # Committing the changes
+            conn.commit()
+
+        # Display success message
+        messagebox.showinfo("Registration Form", "Registration Successful!")
+
+    except sqlite3.Error as error:
+        messagebox.showerror("Database Error", f"An error occurred: {error}")
+
+    finally:
+        # Ensure the connection is closed
+        if conn:
+            conn.close()
+
+
+    # Displaying entered values
+    # print(f"First Name: {first}")
+    # print(f"Last Name: {last}")
+    # print(f"Date of Birth: {date}")
+    # print(f"Country: {country}")
+    # print(f"Programming Languages: {', '.join(programming_languages)}")
+    # print(f"Gender: {gender}")
+    #
+    # # Message box to confirm registration
+    # messagebox.showinfo("Registration Form", "Registration Successful!")
 
 # GUI Layout
 heading = Label(root, text="Registration Form", font="Arial 15 bold", bg="lightblue", fg="black").grid(row=0, column=4, pady=10)
@@ -80,7 +120,7 @@ r1 = Radiobutton(root, text="Male", bg="lightblue", fg="black", variable=radio_v
 r2 = Radiobutton(root, text="Female", bg="lightblue", fg="black", variable=radio_var, value="Female").grid(row=9, column=3)
 
 # Submit and Exit buttons
-Button(root, text="Submit", bg="grey", command=printentry).grid(row=10, column=3)
+Button(root, text="Submit", bg="grey", command=database).grid(row=10, column=3)
 Button(root, text="Exit", bg="grey", command=root.destroy).grid(row=11, column=3)
 
 # Run the GUI event loop
